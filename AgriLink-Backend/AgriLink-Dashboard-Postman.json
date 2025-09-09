@@ -1,0 +1,192 @@
+{
+  "info": {
+    "name": "AgriLink Dashboard API",
+    "description": "Collection Postman pour tester les endpoints du Dashboard AgriLink",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Login Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@agrilink.com\",\n  \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-auth", "login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.token) {",
+              "    pm.collectionVariables.set(\"adminToken\", jsonData.token);",
+              "    console.log(\"Token admin défini: \" + jsonData.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Dashboard Complet",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/dashboard",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "dashboard"]
+        }
+      }
+    },
+    {
+      "name": "3. Widget - Croissance Utilisateurs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/widget/user-growth",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "widget", "user-growth"]
+        }
+      }
+    },
+    {
+      "name": "4. Widget - Activité Annonces",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/widget/annonce-activity",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "widget", "annonce-activity"]
+        }
+      }
+    },
+    {
+      "name": "5. Widget - Top Catégories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/widget/top-categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "widget", "top-categories"]
+        }
+      }
+    },
+    {
+      "name": "6. Widget - Activité Récente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/widget/recent-activity",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "widget", "recent-activity"]
+        }
+      }
+    },
+    {
+      "name": "7. Graphique - 7 jours",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/chart/7d",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "chart", "7d"]
+        }
+      }
+    },
+    {
+      "name": "8. Graphique - 30 jours",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/chart/30d",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "chart", "30d"]
+        }
+      }
+    },
+    {
+      "name": "9. Graphique - 1 an",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin-dashboard/chart/1y",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin-dashboard", "chart", "1y"]
+        }
+      }
+    }
+  ]
+}

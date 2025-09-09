@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "AgriLink Complete API",
+    "description": "Collection Postman complète pour tester toutes les fonctionnalités AgriLink",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "userToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "producteurToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "annonceId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 AUTHENTIFICATION",
+      "item": [
+        {
+          "name": "1. Register - Acheteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"email\": \"acheteur@test.com\",\n  \"password\": \"password123\",\n  \"role\": \"acheteur\",\n  \"telephone\": \"0123456789\",\n  \"adresse\": \"123 Rue du Commerce, Paris\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "2. Register - Producteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Pierre\",\n  \"email\": \"producteur@test.com\",\n  \"password\": \"password123\",\n  \"role\": \"producteur\",\n  \"telephone\": \"0987654321\",\n  \"adresse\": \"456 Ferme Agricole, Normandie\",\n  \"description\": \"Producteur bio depuis 10 ans\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "3. Login - Acheteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"acheteur@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set(\"userToken\", jsonData.token);",
+                  "    console.log(\"Token utilisateur défini: \" + jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Login - Producteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"producteur@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set(\"producteurToken\", jsonData.token);",
+                  "    console.log(\"Token producteur défini: \" + jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📢 ANNONCES",
+      "item": [
+        {
+          "name": "1. Get All Annonces (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/annonces",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "annonces"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.length > 0) {",
+                  "    pm.collectionVariables.set(\"annonceId\", jsonData[0]._id);",
+                  "    console.log(\"Annonce ID défini: \" + jsonData[0]._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Create Annonce (Producteur)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{producteurToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Tomates bio fraîches\",\n  \"description\": \"Tomates biologiques cultivées sans pesticides\",\n  \"prix\": 2.5,\n  \"quantite\": 100,\n  \"unite\": \"kg\",\n  \"categorie\": \"légumes\",\n  \"disponibilite\": true,\n  \"images\": [\"tomate1.jpg\", \"tomate2.jpg\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/annonces",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "annonces"]
+            }
+          }
+        },
+        {
+          "name": "3. Get Annonce by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/annonces/{{annonceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "annonces", "{{annonceId}}"]
+            }
+          }
+        },
+        {
+          "name": "4. Get My Annonces (Producteur)",
+          "request": {
+            "method": "GET",
+            "header": [
