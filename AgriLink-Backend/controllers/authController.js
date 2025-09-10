@@ -1,6 +1,10 @@
 const { body, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-const generateToken = require('../utils/generateToken');
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'defaultsecret', { expiresIn: '30d' });
+};
 
 exports.validateRegister = [
   body('nom').notEmpty().withMessage('nom requis'),
@@ -35,7 +39,6 @@ exports.registerUser = async (req, res, next) => {
       telephone,
       adresse,
       ville,
-      etat,
       password,
       role: role || 'acheteur'
     };

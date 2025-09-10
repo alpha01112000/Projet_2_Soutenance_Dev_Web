@@ -9,15 +9,15 @@ const APropos = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative text-white h-120 flex items-center justify-center">
+      <section className="relative text-white h-80 md:h-120 flex items-center justify-center">
         <img
           src="/src/assets/Desktop - 17.png"
           alt="À propos background"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
-        <div className="relative rounded-full w-72 h-72 flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-4xl font-extrabold mb-4">À propos d'AgriLink</h1>
-            <p className="max-w-2xl text-lg">
+        <div className="relative rounded-full w-64 md:w-72 h-64 md:h-72 flex flex-col items-center justify-center text-center px-4 md:px-6">
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-4">À propos d'AgriLink</h1>
+            <p className="max-w-2xl text-base md:text-lg px-4">
               Découvrez qui nous sommes, notre vision et nos valeurs pour transformer le marché agricole guinéen.
             </p>
           </div>
@@ -63,28 +63,28 @@ const APropos = () => {
       </section>
 
       {/* Nos Valeurs */}
-      <section className="max-w-7xl mx-auto px-6 py-16 bg-[#EBE9E9] text-center">
-        <h2 className="text-3xl font-bold mb-12">Nos Valeurs</h2>
-        <div className="flex flex-wrap justify-center gap-8">
-          <div className="bg-white rounded-lg shadow-md p-6 w-40 flex flex-col items-center">
-            <img src="/src/assets/Group 29.png" alt="Intégrité" className="h-12 mb-4" />
-            <p className="font-semibold">Intégrité</p>
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16 bg-[#EBE9E9] text-center">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12">Nos Valeurs</h2>
+        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 w-32 md:w-40 flex flex-col items-center">
+            <img src="/src/assets/Group 29.png" alt="Intégrité" className="h-10 md:h-12 mb-3 md:mb-4" />
+            <p className="font-semibold text-sm md:text-base">Intégrité</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 w-40 flex flex-col items-center">
-            <img src="/src/assets/Group 30.png" alt="Innovation" className="h-12 mb-4" />
-            <p className="font-semibold">Innovation</p>
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 w-32 md:w-40 flex flex-col items-center">
+            <img src="/src/assets/Group 30.png" alt="Innovation" className="h-10 md:h-12 mb-3 md:mb-4" />
+            <p className="font-semibold text-sm md:text-base">Innovation</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 w-40 flex flex-col items-center">
-            <img src="/src/assets/Group 31.png" alt="Transparence" className="h-12 mb-4" />
-            <p className="font-semibold">Transparence</p>
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 w-32 md:w-40 flex flex-col items-center">
+            <img src="/src/assets/Group 31.png" alt="Transparence" className="h-10 md:h-12 mb-3 md:mb-4" />
+            <p className="font-semibold text-sm md:text-base">Transparence</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 w-40 flex flex-col items-center">
-            <img src="/src/assets/Group 33.png" alt="Collaboration" className="h-12 mb-4" />
-            <p className="font-semibold">Collaboration</p>
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 w-32 md:w-40 flex flex-col items-center">
+            <img src="/src/assets/Group 33.png" alt="Collaboration" className="h-10 md:h-12 mb-3 md:mb-4" />
+            <p className="font-semibold text-sm md:text-base">Collaboration</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 w-40 flex flex-col items-center">
-            <img src="/src/assets/Group 32.png" alt="Inclusion" className="h-12 mb-4" />
-            <p className="font-semibold">Inclusion</p>
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 w-32 md:w-40 flex flex-col items-center">
+            <img src="/src/assets/Group 32.png" alt="Inclusion" className="h-10 md:h-12 mb-3 md:mb-4" />
+            <p className="font-semibold text-sm md:text-base">Inclusion</p>
           </div>
         </div>
       </section>

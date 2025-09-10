@@ -36,15 +36,15 @@ const Contact = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-green-900 text-white h-130 flex items-center justify-center">
+      <section className="relative bg-green-900 text-white h-80 md:h-130 flex items-center justify-center">
         <img
           src="/src/assets/Desktop - 24.png"
           alt="Contact background"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
-        <div className="relative  bg-opacity-70 rounded-lg p-8 max-w-3xl text-center">
-          <h1 className="text-4xl font-extrabold mb-4">Contactez-nous</h1>
-          <p className="text-lg">
+        <div className="relative bg-opacity-70 rounded-lg p-6 md:p-8 max-w-3xl text-center">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-4">Contactez-nous</h1>
+          <p className="text-base md:text-lg px-4">
             Une <strong>question</strong>, un <strong>partenariat</strong> ou un <strong>souci</strong> sur la plateforme ? L'équipe <strong>AgriLink</strong> est à votre écoute.
           </p>
         </div>

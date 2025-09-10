@@ -3,14 +3,15 @@ const Message = require('../models/messageModel');
 const Annonce = require('../models/annonceModel');
 const sendEmail = require('../utils/sendEmail');
 
-exports.validateContact = [
+exports.validateMessage = [
   body('annonce').notEmpty().withMessage('annonce requis'),
   body('contenu').notEmpty().withMessage('message requis')
 ];
 
-exports.contactVendeur = async (req, res, next) => {
+exports.sendMessage = async (req, res, next) => {
   try {
-    const errors = validationResult(req); if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
     const { annonce: annonceId, contenu } = req.body;
     const annonce = await Annonce.findById(annonceId).populate('vendeur', 'email nom');
@@ -28,7 +29,7 @@ exports.contactVendeur = async (req, res, next) => {
       content: contenu
     });
 
-    // "Envoi" d’email (console)
+    // "Envoi" d'email (console)
     await sendEmail({
       to: annonce.vendeur.email,
       subject: `Nouveau message pour votre annonce: ${annonce.titre}`,
@@ -37,16 +38,6 @@ exports.contactVendeur = async (req, res, next) => {
 
     res.status(201).json({ message: 'Message envoyé au vendeur', data: msg });
   } catch (e) { next(e); }
-};
-
-exports.getMyContactsCount = async (req, res) => {
-  try {
-    const count = await Message.countDocuments({ recipient: req.user._id });
-    res.json({ count });
-  } catch (error) {
-    console.error('Erreur lors de la récupération du nombre de contacts:', error);
-    res.status(500).json({ error: 'Erreur serveur' });
-  }
 };
 
 exports.getMyMessages = async (req, res) => {
@@ -60,6 +51,32 @@ exports.getMyMessages = async (req, res) => {
     res.json(messages);
   } catch (error) {
     console.error('Erreur lors de la récupération des messages:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+exports.getMyMessagesCount = async (req, res) => {
+  try {
+    const count = await Message.countDocuments({ recipient: req.user._id });
+    res.json({ count });
+  } catch (error) {
+    console.error('Erreur lors de la récupération du nombre de messages:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+exports.markAsRead = async (req, res) => {
+  try {
+    const message = await Message.findById(req.params.id);
+    if (!message) return res.status(404).json({ error: 'Message introuvable' });
+    if (message.recipient.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: 'Non autorisé' });
+    }
+    message.isRead = true;
+    await message.save();
+    res.json({ message: 'Message marqué comme lu' });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du message:', error);
     res.status(500).json({ error: 'Erreur serveur' });
   }
 };

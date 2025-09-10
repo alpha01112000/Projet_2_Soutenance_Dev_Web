@@ -9,6 +9,7 @@ const annonceSchema = new mongoose.Schema(
         type: Number,
         required: true,
     },
+    categorie: { type: String, required: true, enum: ['Fruits', 'Légumes', 'Grains', 'Autres'] },
     images: {
         type: [String], // Pour stocker plusieurs images
         required: true,

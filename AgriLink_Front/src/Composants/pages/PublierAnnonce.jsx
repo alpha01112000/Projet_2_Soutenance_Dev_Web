@@ -93,6 +93,7 @@ const PublierAnnonce = () => {
       formDataToSend.append('description', formData.description);
       formDataToSend.append('prix', formData.prix);
       formDataToSend.append('quantite', formData.quantite);
+      formDataToSend.append('categorie', formData.categorie);
 
       // Structure de localisation attendue par le backend
       formDataToSend.append('localisation[region]', formData.region);
@@ -150,20 +151,20 @@ const PublierAnnonce = () => {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
       {/* Header */}
-      <header className="flex items-center justify-between p-6 bg-white shadow-md max-w-7xl mx-auto">
+      <header className="flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-white shadow-md max-w-7xl mx-auto space-y-4 md:space-y-0">
         <div className="flex items-center space-x-2">
-          <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-10 w-10" />
-          <span className="font-bold text-xl text-green-900">AgriLink</span>
+          <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-8 md:h-10 w-8 md:w-10" />
+          <span className="font-bold text-lg md:text-xl text-green-900">AgriLink</span>
         </div>
-        <nav className="space-x-8 text-gray-700 font-semibold">
+        <nav className="flex flex-wrap justify-center space-x-4 md:space-x-8 text-gray-700 font-semibold text-sm md:text-base">
           <button onClick={() => navigate('/')} className="hover:text-green-700">Accueil</button>
           <button onClick={() => navigate('/annonces')} className="hover:text-green-700">Les annonces</button>
           <button onClick={() => navigate('/faq')} className="hover:text-green-700">FAQ</button>
           <button onClick={() => navigate('/apropos')} className="hover:text-green-700">À propos</button>
           <button onClick={() => navigate('/contact')} className="hover:text-green-700">Contact</button>
         </nav>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-700 font-semibold">
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+          <span className="text-gray-700 font-semibold text-sm md:text-base text-center">
             Bonjour {user?.prenom || user?.nom || 'Producteur'}
           </span>
           <button
@@ -172,7 +173,7 @@ const PublierAnnonce = () => {
               localStorage.removeItem('userRole');
               navigate('/login');
             }}
-            className="bg-yellow-400 text-green-900 font-semibold px-4 py-2 rounded shadow hover:bg-yellow-500 transition"
+            className="bg-yellow-400 text-green-900 font-semibold px-3 md:px-4 py-2 rounded shadow hover:bg-yellow-500 transition text-sm md:text-base"
           >
             Déconnexion
           </button>
@@ -180,20 +181,20 @@ const PublierAnnonce = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-green-900 text-white h-130 flex items-center justify-center">
+      <section className="relative bg-green-900 text-white h-80 md:h-130 flex items-center justify-center">
         <img
           src="/src/assets/creer une annonce.png"
           alt="Contact background"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
-        <div className="relative bg-opacity-70 rounded-lg p-8 max-w-3xl text-center">
-          <h1 className="text-5xl font-extrabold mb-6 drop-shadow-lg">Publiez votre annonce en quelques clics</h1>
-          <p className="text-xl mb-8 drop-shadow-md">
+        <div className="relative bg-opacity-70 rounded-lg p-6 md:p-8 max-w-3xl text-center">
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 drop-shadow-lg">Publiez votre annonce en quelques clics</h1>
+          <p className="text-lg md:text-xl mb-6 md:mb-8 drop-shadow-md px-4">
             Mettez en avant vos produits agricoles et trouvez rapidement des acheteurs intéressés.
           </p>
           <button
             onClick={() => navigate('/annonces')}
-            className="bg-yellow-400 text-green-900 font-semibold px-8 py-4 rounded shadow hover:bg-yellow-500 transition"
+            className="bg-yellow-400 text-green-900 font-semibold px-6 md:px-8 py-3 md:py-4 rounded shadow hover:bg-yellow-500 transition text-sm md:text-base"
           >
             Explorer les annonces
           </button>
@@ -201,7 +202,7 @@ const PublierAnnonce = () => {
       </section>
 
       {/* Form Section */}
-      <section className="max-w-5xl mx-auto px-6 py-12 bg-white">
+      <section className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 bg-white">
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <h2 className="text-lg font-semibold text-green-800 mb-2">Informations de contact</h2>
           <p className="text-green-700 text-sm">
@@ -209,7 +210,7 @@ const PublierAnnonce = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
             <label htmlFor="titre" className="block text-sm font-medium text-gray-700 mb-1">
               Nom du produit <span className="text-red-500">*</span>
@@ -272,6 +273,27 @@ const PublierAnnonce = () => {
               required
               className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-700"
             />
+          </div>
+
+          <div>
+            <label htmlFor="categorie" className="block text-sm font-medium text-gray-700 mb-1">
+              Catégorie <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="categorie"
+              name="categorie"
+              value={formData.categorie}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-700"
+            >
+              <option value="">Sélectionner une catégorie</option>
+              {categories.map((categorie) => (
+                <option key={categorie} value={categorie}>
+                  {categorie}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -355,17 +377,17 @@ const PublierAnnonce = () => {
             />
           </div>
 
-          <div className="md:col-span-2 flex justify-end space-x-4 mt-6">
+          <div className="md:col-span-2 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 mt-6">
             <button
               type="button"
               onClick={handleCancel}
-              className="bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded hover:bg-gray-400 transition"
+              className="bg-gray-300 text-gray-700 font-semibold px-4 md:px-6 py-3 rounded hover:bg-gray-400 transition text-sm md:text-base"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="bg-yellow-400 text-green-900 font-semibold px-6 py-3 rounded hover:bg-yellow-500 transition"
+              className="bg-yellow-400 text-green-900 font-semibold px-4 md:px-6 py-3 rounded hover:bg-yellow-500 transition text-sm md:text-base"
             >
               Publier l'annonce
             </button>
@@ -375,8 +397,8 @@ const PublierAnnonce = () => {
 
       {/* Footer */}
       <footer className="bg-[#EBE9E9] border-t border-gray-300 py-8 mt-16">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between">
-          <div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between">
+          <div className="mb-6 md:mb-0">
             <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-10 w-10 mb-2" />
             <p className="text-gray-600 text-sm">
               Reconnecter l'agriculture locale,
@@ -385,7 +407,7 @@ const PublierAnnonce = () => {
               gagnent davantage et où les communautés locales mangent mieux chaque jour.
             </p>
           </div>
-          <div className="flex space-x-12 mt-6 md:mt-0">
+          <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-8 md:space-x-12">
             <div>
               <h4 className="font-semibold mb-2">Liens utiles</h4>
               <ul className="text-gray-600 text-sm space-y-1">

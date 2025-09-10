@@ -93,12 +93,12 @@ const FAQ = () => {
   return (
     <div className="font-sans text-gray-900">
       {/* Header */}
-      <header className="flex items-center justify-between p-6 bg-white shadow-md max-w-7xl mx-auto">
+      <header className="flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-white shadow-md max-w-7xl mx-auto space-y-4 md:space-y-0">
         <div className="flex items-center space-x-2">
-          <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-10 w-10" />
-          <span className="font-bold text-xl text-green-900">AgriLink</span>
+          <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-8 md:h-10 w-8 md:w-10" />
+          <span className="font-bold text-lg md:text-xl text-green-900">AgriLink</span>
         </div>
-        <nav className="space-x-8 text-gray-700 font-semibold">
+        <nav className="flex flex-wrap justify-center space-x-4 md:space-x-8 text-gray-700 font-semibold text-sm md:text-base">
           <Link to="/" className="hover:text-green-700">Accueil</Link>
           <Link to="/annonces" className="hover:text-green-700">Les annonces</Link>
           <Link to="/faq" className="text-green-700 font-bold">FAQ</Link>
@@ -147,16 +147,16 @@ const FAQ = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white flex items-center justify-center">
+      <section className="relative bg-gray-900 text-white flex items-center justify-center h-80 md:h-96">
         <img
           src="/src/assets/Desktop - 22 (3).png"
           alt="FAQ background"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
-        <div className="relative rounded-full w-72 h-120 flex flex-col items-center justify-center text-center px-6">
-          <h1 className="text-4xl font-extrabold mb-2">FAQ</h1>
-          <p className="text-lg max-w-xs">
-            Trouvez rapidement des <span className="font-bold">réponses</span> aux questions les <br /> plus fréquentes sur <span className="font-bold">AgriLink</span>.
+        <div className="relative rounded-lg p-6 md:p-8 max-w-3xl text-center">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-4">FAQ</h1>
+          <p className="text-base md:text-lg px-4">
+            Trouvez rapidement des <span className="font-bold">réponses</span> aux questions les plus fréquentes sur <span className="font-bold">AgriLink</span>.
           </p>
         </div>
       </section>

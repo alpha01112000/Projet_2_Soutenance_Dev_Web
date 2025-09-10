@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -17,12 +17,12 @@ const Header = ({ user, onLogout }) => {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md max-w-7xl mx-auto">
+    <header className="flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-white shadow-md max-w-7xl mx-auto space-y-4 md:space-y-0">
       <div className="flex items-center space-x-2">
-        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-10 w-10" />
-        <span className="font-bold text-xl text-green-900">AgriLink</span>
+        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="h-8 md:h-10 w-8 md:w-10" />
+        <span className="font-bold text-lg md:text-xl text-green-900">AgriLink</span>
       </div>
-      <nav className="flex space-x-6 text-gray-700 font-semibold">
+      <nav className="flex flex-wrap justify-center space-x-4 md:space-x-6 text-gray-700 font-semibold text-sm md:text-base">
         <Link to="/" className="hover:text-green-700">Accueil</Link>
         <Link to="/annonces" className="hover:text-green-700">les annonces</Link>
         <Link to="/faq" className="hover:text-green-700">FAQ</Link>
@@ -101,6 +101,12 @@ const TableauDeBordWithHeader = () => {
   const regions = ['Conakry', 'Kankan', 'Labé', 'Nzérékoré'];
 
   useEffect(() => {
+    const userRole = localStorage.getItem('userRole');
+    if (userRole !== 'producteur' && userRole !== 'admin') {
+      alert('Accès refusé. Cette page est réservée aux producteurs.');
+      navigate('/');
+      return;
+    }
     fetchUser();
   }, []);
 
@@ -149,10 +155,10 @@ const TableauDeBordWithHeader = () => {
       const annoncesRes = await axios.get('/api/annonces/me/count', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      const contactsRes = await axios.get('/api/contact/me/count', {
+      const messagesRes = await axios.get('/api/messages/count', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      setStats({ annoncesCount: annoncesRes.data.count, contactsCount: contactsRes.data.count });
+      setStats({ annoncesCount: annoncesRes.data.count, contactsCount: messagesRes.data.count });
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques', error);
     }
@@ -182,7 +188,7 @@ const TableauDeBordWithHeader = () => {
 
   const fetchMessagesRecus = async () => {
     try {
-      const res = await axios.get('/api/contact/mine', {
+      const res = await axios.get('/api/messages/mine', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setMessages(res.data);
@@ -211,6 +217,7 @@ const TableauDeBordWithHeader = () => {
       formDataToSend.append('description', formData.description);
       formDataToSend.append('prix', formData.prix);
       formDataToSend.append('quantite', formData.quantite);
+      formDataToSend.append('categorie', formData.categorie);
 
       // Structure de localisation attendue par le backend
       formDataToSend.append('localisation[region]', formData.region);
@@ -278,27 +285,35 @@ const TableauDeBordWithHeader = () => {
       case 'vueEnsemble':
         return (
           <>
-            <h1 className="text-2xl font-semibold mb-4">Vue d'ensemble</h1>
-            <h2 className="text-green-700 mb-2">Informations principales</h2>
-            <div className="flex space-x-4 mb-6">
-              <div className="bg-gray-200 p-6 rounded w-40 text-center">
-                <div className="text-4xl font-bold">{stats.annoncesCount}</div>
-                <div>annonces publiées</div>
+            <h1 className="text-xl md:text-2xl font-semibold mb-4">Vue d'ensemble</h1>
+            <h2 className="text-green-700 mb-2 text-lg md:text-xl">Informations principales</h2>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+              <div className="bg-gray-200 p-4 md:p-6 rounded w-full sm:w-40 text-center">
+                <div className="text-3xl md:text-4xl font-bold">{stats.annoncesCount}</div>
+                <div className="text-sm md:text-base">annonces publiées</div>
               </div>
-              <div className="bg-gray-200 p-6 rounded w-40 text-center">
-                <div className="text-4xl font-bold">{stats.contactsCount}</div>
-                <div>contacts reçus</div>
+              <div className="bg-gray-200 p-4 md:p-6 rounded w-full sm:w-40 text-center">
+                <div className="text-3xl md:text-4xl font-bold">{stats.contactsCount}</div>
+                <div className="text-sm md:text-base">contacts reçus</div>
               </div>
             </div>
-            <h2 className="text-green-700 mb-2">Dernières annonces</h2>
-            <div className="bg-gray-200 rounded p-4">
+            <h2 className="text-green-700 mb-2 text-lg md:text-xl">Dernières annonces</h2>
+            <div className="bg-gray-200 rounded p-4 md:p-6">
               {annonces.length === 0 ? (
-                <p>Aucune annonce récente.</p>
+                <p className="text-center text-gray-500 py-4">Aucune annonce récente.</p>
               ) : (
-                <ul>
+                <ul className="space-y-2">
                   {annonces.map((annonce) => (
-                    <li key={annonce._id} className="border-b py-2">
-                      <strong>{annonce.titre}</strong> - {annonce.categorie || 'Catégorie non spécifiée'}
+                    <li key={annonce._id} className="border-b border-gray-300 py-3 last:border-b-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex-1">
+                          <strong className="text-gray-800 text-sm md:text-base">{annonce.titre}</strong>
+                          <span className="text-gray-600 text-sm ml-2">- {annonce.categorie || 'Catégorie non spécifiée'}</span>
+                        </div>
+                        <div className="text-gray-600 text-sm mt-1 sm:mt-0">
+                          {annonce.prix} GNF
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -309,55 +324,62 @@ const TableauDeBordWithHeader = () => {
       case 'mesAnnonces':
         return (
           <>
-            <h1 className="text-2xl font-semibold mb-4">Mes annonces</h1>
+            <h1 className="text-xl md:text-2xl font-semibold mb-4">Mes annonces</h1>
             {annonces.length === 0 ? (
-              <p>Aucune annonce publiée.</p>
+              <p className="text-center text-gray-500 py-8">Aucune annonce publiée.</p>
             ) : (
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr>
-                    <th className="border border-gray-300 p-2">Image</th>
-                    <th className="border border-gray-300 p-2">Titre</th>
-                    <th className="border border-gray-300 p-2">Catégorie</th>
-                    <th className="border border-gray-300 p-2">Prix / (kg ou unité)</th>
-                    <th className="border border-gray-300 p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {annonces.map((annonce) => (
-                    <tr key={annonce._id}>
-                      <td className="border border-gray-300 p-2">
-                        {annonce.images && annonce.images.length > 0 ? (
-                          <img src={annonce.images[0]} alt={annonce.titre} className="w-16 h-16 object-cover" />
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                      <td className="border border-gray-300 p-2">{annonce.titre}</td>
-                      <td className="border border-gray-300 p-2">{annonce.categorie || 'N/A'}</td>
-                      <td className="border border-gray-300 p-2">{annonce.prix}</td>
-                      <td className="border border-gray-300 p-2">
-                        <button className="text-red-600 hover:underline" onClick={() => handleDelete(annonce._id)}>Supprimer</button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 min-w-full">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="border border-gray-300 p-2 md:p-3 text-left text-sm md:text-base">Image</th>
+                      <th className="border border-gray-300 p-2 md:p-3 text-left text-sm md:text-base">Titre</th>
+                      <th className="border border-gray-300 p-2 md:p-3 text-left text-sm md:text-base">Catégorie</th>
+                      <th className="border border-gray-300 p-2 md:p-3 text-left text-sm md:text-base">Prix</th>
+                      <th className="border border-gray-300 p-2 md:p-3 text-left text-sm md:text-base">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {annonces.map((annonce) => (
+                      <tr key={annonce._id} className="hover:bg-gray-50">
+                        <td className="border border-gray-300 p-2 md:p-3">
+                          {annonce.images && annonce.images.length > 0 ? (
+                            <img src={annonce.images[0]} alt={annonce.titre} className="w-12 h-12 md:w-16 md:h-16 object-cover rounded" />
+                          ) : (
+                            <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">N/A</div>
+                          )}
+                        </td>
+                        <td className="border border-gray-300 p-2 md:p-3 text-sm md:text-base font-medium">{annonce.titre}</td>
+                        <td className="border border-gray-300 p-2 md:p-3 text-sm md:text-base">{annonce.categorie || 'N/A'}</td>
+                        <td className="border border-gray-300 p-2 md:p-3 text-sm md:text-base">{annonce.prix} GNF</td>
+                        <td className="border border-gray-300 p-2 md:p-3">
+                          <button
+                            className="text-red-600 hover:underline text-sm md:text-base px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                            onClick={() => handleDelete(annonce._id)}
+                          >
+                            Supprimer
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </>
         );
       case 'creerAnnonce':
         if (localStorage.getItem('userRole') !== 'producteur') {
           return (
-            <div>
-              <h2 className="text-red-600 font-semibold">Vous devez être connecté en tant que producteur pour créer une annonce.</h2>
+            <div className="p-4 md:p-6">
+              <h2 className="text-red-600 font-semibold text-lg md:text-xl">Vous devez être connecté en tant que producteur pour créer une annonce.</h2>
             </div>
           );
         }
         return (
           <>
-            <h1 className="text-2xl font-semibold mb-4">Créer une annonce</h1>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h1 className="text-xl md:text-2xl font-semibold mb-4">Créer une annonce</h1>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div>
                 <label htmlFor="titre" className="block text-sm font-medium text-gray-700 mb-1">
                   Nom du produit
@@ -420,6 +442,27 @@ const TableauDeBordWithHeader = () => {
                   required
                   className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-700"
                 />
+              </div>
+
+              <div>
+                <label htmlFor="categorie" className="block text-sm font-medium text-gray-700 mb-1">
+                  Catégorie <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="categorie"
+                  name="categorie"
+                  value={formData.categorie}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-700"
+                >
+                  <option value="">Sélectionner une catégorie</option>
+                  {categories.map((categorie) => (
+                    <option key={categorie} value={categorie}>
+                      {categorie}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -528,17 +571,36 @@ const TableauDeBordWithHeader = () => {
       case 'messagesRecus':
         return (
           <>
-            <h1 className="text-2xl font-semibold mb-4">Messages reçus</h1>
+            <h1 className="text-xl md:text-2xl font-semibold mb-4">Messages reçus</h1>
             {messages.length === 0 ? (
-              <p>Aucun message reçu.</p>
+              <p className="text-center text-gray-500 py-8">Aucun message reçu.</p>
             ) : (
-              <ul>
+              <div className="space-y-4">
                 {messages.map((msg) => (
-                  <li key={msg._id} className="border-b py-2">
-                    <strong>{msg.nom}</strong> : {msg.message}
-                  </li>
+                  <div key={msg._id} className="bg-gray-50 p-4 md:p-6 rounded-lg shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center mb-2">
+                          <strong className="text-gray-800 text-sm md:text-base font-medium">
+                            {msg.sender ? `${msg.sender.prenom || ''} ${msg.sender.nom || ''}`.trim() : 'Utilisateur inconnu'}
+                          </strong>
+                          <span className="text-gray-500 text-xs sm:ml-2 mt-1 sm:mt-0">
+                            {msg.sender?.email || 'Email non fourni'}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">{msg.content}</p>
+                      </div>
+                      <div className="text-gray-400 text-xs mt-2 sm:mt-0 sm:ml-4">
+                        {new Date(msg.createdAt || Date.now()).toLocaleDateString('fr-FR', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </>
         );
@@ -565,8 +627,8 @@ const TableauDeBordWithHeader = () => {
         localStorage.removeItem('user');
         setUser(null);
       }} />
-      <div className="flex h-screen overflow-hidden">
-        <aside className="bg-green-700 text-white w-48 flex flex-col p-4 space-y-4">
+      <div className="flex flex-col md:flex-row md:h-screen overflow-hidden">
+        <aside className="bg-green-700 text-white w-full md:w-48 flex flex-col p-4 space-y-4 md:h-full">
           <div
             className={`p-2 rounded cursor-pointer ${activeSection === 'vueEnsemble' ? 'bg-white text-green-700' : ''}`}
             onClick={() => setActiveSection('vueEnsemble')}
@@ -598,7 +660,7 @@ const TableauDeBordWithHeader = () => {
             <span>Paramètre</span>
           </div>
         </aside>
-        <main className="flex-1 p-8 overflow-auto bg-white">
+        <main className="flex-1 p-4 md:p-8 overflow-auto bg-white">
           {renderContent()}
         </main>
       </div>

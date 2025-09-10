@@ -58,7 +58,6 @@ const Register = () => {
       if (formData.role === 'acheteur') {
         userData.adresse = formData.adresse;
         userData.ville = formData.ville;
-        userData.etat = formData.etat;
       } else if (formData.role === 'producteur') {
         userData.typeCulture = formData.typeCulture;
         userData.superficie = formData.superficie ? parseFloat(formData.superficie) : undefined;
@@ -78,24 +77,24 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen w-screen flex flex-col md:flex-row">
       {/* Left image */}
-      <div className="w-1/2 h-full">
+      <div className="w-full md:w-1/2 h-full order-2 md:order-1">
         <img
-          src="/src/assets/Longin.png"
+          src="/src/assets/inscription.png"
           alt="Agriculteur souriant"
           className="h-full w-full object-cover"
         />
       </div>
 
       {/* Right form */}
-      <div className="w-1/2 h-full flex flex-col items-center p-12 overflow-y-auto">
-        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="mb-6 w-24" />
-        <h2 className="text-center mb-6 text-lg font-normal">
+      <div className="w-full md:w-1/2 flex flex-col items-center p-6 md:p-12 overflow-y-auto order-1 md:order-2">
+        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="mb-4 md:mb-6 w-20 md:w-24" />
+        <h2 className="text-center mb-4 md:mb-6 text-base md:text-lg font-normal px-4">
           Rejoignez la communauté AgriLink 🌱 et vendez ou trouvez des produits agricoles facilement.
         </h2>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md space-y-4 overflow-visible">
+        <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md space-y-3 md:space-y-4 overflow-visible">
           <div>
             <label htmlFor="prenom" className="block mb-1 text-sm font-medium">Prénom</label>
             <input
@@ -178,20 +177,6 @@ const Register = () => {
                   name="ville"
                   placeholder="Entrez votre ville"
                   value={formData.ville}
-                  onChange={handleChange}
-                  className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="etat" className="block mb-1 text-sm font-medium">État</label>
-                <input
-                  type="text"
-                  id="etat"
-                  name="etat"
-                  placeholder="Entrez votre état"
-                  value={formData.etat}
                   onChange={handleChange}
                   className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                   required

@@ -7,6 +7,7 @@ exports.validateAnnonce = [
   body('description').notEmpty().withMessage('description requise'),
   body('prix').isFloat({ min: 0 }).withMessage('prix >= 0'),
   body('quantite').isInt({ min: 1 }).withMessage('quantite requise et >= 1'),
+  body('categorie').isIn(['Fruits', 'Légumes', 'Grains', 'Autres']).withMessage('catégorie invalide'),
   body('localisation.region').notEmpty().withMessage('région requise'),
   body('localisation.ville').notEmpty().withMessage('ville requise'),
   body('contact.nom').notEmpty().withMessage('nom de contact requis'),
@@ -47,11 +48,12 @@ exports.createAnnonce = async (req, res, next) => {
 
 exports.getAnnonces = async (req, res, next) => {
   try {
-    const { q, vendeur, dispo } = req.query;
+    const { q, vendeur, dispo, categorie } = req.query;
     const filter = {};
     if (q) filter.$text = { $search: q };
     if (vendeur) filter.vendeur = vendeur;
     if (dispo !== undefined) filter.disponibilite = dispo === 'true';
+    if (categorie) filter.categorie = categorie;
 
     // Fix for count query: if q === 'count', return count instead of find
     if (q === 'count') {

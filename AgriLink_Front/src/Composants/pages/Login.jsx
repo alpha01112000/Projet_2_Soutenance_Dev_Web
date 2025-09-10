@@ -27,6 +27,7 @@ const Login = () => {
       // Store token and user info in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userRole', response.data.user.role);
+      localStorage.setItem('userId', response.data.user._id);
 
       setStatus({ success: true, message: 'Connexion réussie !' });
 
@@ -42,25 +43,25 @@ const Login = () => {
   };
 
   return (
-<div className="min-h-screen flex h-screen overflow-hidden">
+<div className="min-h-screen flex flex-col md:flex-row md:h-screen overflow-hidden">
       {/* Left image */}
-      <div className="w-1/2">
+      <div className="w-full md:w-1/2 order-2 md:order-1">
         <img
           src="/src/assets/Longin.png"
           alt="Agriculteur souriant"
-          className="h-full w-full object-cover"
+          className="h-64 md:h-full w-full object-cover"
         />
       </div>
 
       {/* Right form */}
-      <div className="w-1/2 flex flex-col justify-center items-center p-12">
-        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="mb-6 w-24" />
-        <h2 className="text-2xl font-semibold mb-4 text-center">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-12 order-1 md:order-2">
+        <img src="/src/assets/logo.png" alt="AgriLink Logo" className="mb-6 w-20 md:w-24" />
+        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-center px-4">
           Heureux de vous revoir <span role="img" aria-label="wave">👋</span> !<br />
           Connectez-vous pour accéder à vos annonces et services.
         </h2>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-sm">
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
             <input

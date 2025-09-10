@@ -92,7 +92,7 @@ const Accueil = () => {
           <p className="text-center text-gray-600 mb-12">
             Parcourez une large gamme de produits agricoles mis en vente par nos producteurs partenaires.
           </p>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="relative rounded-lg overflow-hidden shadow-lg">
               <img src="/src/assets/fraise.jpg" alt="Fraise" className="w-full h-40 object-cover" />
               <div className="absolute bottom-0 left-0 bg-[#FBC02D] text-black px-3 py-1 text-sm font-semibold">Fraise</div>

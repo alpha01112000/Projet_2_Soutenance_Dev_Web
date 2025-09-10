@@ -8,6 +8,7 @@ const adminSuperRoutes = require('./routes/adminSuperRoutes'); // Routes super a
 const annonceRoutes = require('./routes/annonceRoutes');
 const produitRoutes = require('./routes/produitRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/admin/super', adminSuperRoutes);
 app.use('/api/annonces', annonceRoutes);
 app.use('/api/produits', produitRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
